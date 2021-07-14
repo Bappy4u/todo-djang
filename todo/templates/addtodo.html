@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block main %}
+ <div class="content-center">
+     {% if added %}
+        <h2 class="text-center new-todo-added">Successfully Added a todo. View the
+            <a href="{% url 'todo_view' %}"> List Here</a></h2>
+
+     {% endif %}
+     <div class="add-todo-form">
+         <form action="" method="post">
+             {% csrf_token %}
+            <label for="todo">New Todo
+             <input id="todo" name="todo" type="text" required>
+            </label>
+             <label for="due_date">Due Date
+            <input id="due_date" name="due_date" type="date" required>
+            </label>
+             <br>
+             <input type="submit" value="Submit">
+        </form>
+     </div>
+
+ </div>
+{% endblock %}

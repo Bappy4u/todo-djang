@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main %}
+<div class="content-center" id="settings">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p><label for="id_bio_field">Update Bio:</label>
+            <input type="text" name="bio_field" required="" id="id_bio_field"></p>
+        <p><label for="id_img_field">Profile Picture:</label> <input type="file" name="img_field" accept="image/*"
+                                                               required="" id="id_img_field"></p>
+        <input type="submit" value="Save">
+    </form>
+</div>
+{% endblock %}
