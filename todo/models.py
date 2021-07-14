@@ -13,10 +13,12 @@ class TodoList(models.Model):
 
 class Profile(models.Model):
     # required to associate Author model with User model (Important)
-    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, null=True, blank=True, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     birth_date = models.DateField(null=True, blank=True)
-    profile_photo = models.ImageField(upload_to='static/profilepicture')
+    profile_photo = models.ImageField(
+        upload_to='static/profilepicture', null=True)
 
 
 @receiver(post_save, sender=User)
@@ -28,4 +30,3 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
-

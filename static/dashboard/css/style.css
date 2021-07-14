@@ -30,8 +30,14 @@ body {
 .sidenav .top a {
   text-align: center;
 }
+.sidenav .top .bi-person-circle {
+  font-size: 55px;
+}
 .sidenav a.active {
   border-right: 5px solid #007bff;
+}
+.no-todo-text {
+  text-align: center;
 }
 .sidenav a i {
   padding-right: 5px;
@@ -121,6 +127,20 @@ div.statistic {
 .statistic .number {
   font-weight: bold;
   font-size: 40px;
+}
+#dashboard a:hover {
+  text-decoration: none;
+}
+#dashboard a:hover div {
+  transform: scale(1.05);
+  z-index: 1;
+}
+#dashboard a div {
+  transition: all 0.2s;
+}
+.statistic .text {
+  font-weight: bold;
+  font-size: 28px;
 }
 .task-completed .number {
   color: #7adc2c;
@@ -238,7 +258,7 @@ ul li a:hover i {
 
 /* settings css */
 
-#settings  form{
+#settings form {
   margin: auto;
 }
 

@@ -1,42 +1,46 @@
-{% extends "base.html" %}
-{% block main %}
-{% load static %}
-    <div class="scontainer">
-        <div class="img">
-            <img src="{% static 'login/image/svg/side.svg' %}" alt="">
+{% extends "base.html" %} {% block main %} {% load static %}
+<div class="scontainer">
+  <div class="img">
+    <img src="{% static 'login/image/svg/side.svg' %}" alt="" />
+  </div>
+  <div class="login-container">
+    <form method="post" id="login-form">
+      {% csrf_token %}
+      <img
+        src="{% static 'login/image/svg/avatar.svg' %}"
+        alt=""
+        class="avatar"
+      />
+      <h2>Welcome</h2>
+      <div class="input-div one">
+        <div class="i">
+          <i class="fas fa-user"></i>
         </div>
-        <div class="login-container">
-            <form method="post">
-                {% csrf_token %}
-                <img src="{% static 'login/image/svg/avatar.svg' %}" alt="" class="avatar">
-                <h2>Welcome</h2>
-                <div class="input-div one">
-                    <div class="i">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div>
-                        <h5>Username</h5>
-                        <input type="text" name="username" class="input">
-                    </div>
-                </div>
-                <div class="input-div two">
-                    <div class="i">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <div>
-                        <h5>Password</h5>
-                        <input type="password" name="password" class="input">
-                    </div>
-                </div>
-                <a href="#">Forgot Password?</a>
-                <input type="submit" class="btn" value="Login">
-                <span id="signup">or<a href="../signup"> Create an account?</a></span>
-            </form>
-            
+        <div>
+          <h5>Username</h5>
+          <input type="text" name="username" class="input demo-user" />
+        </div>
+      </div>
+      <div class="input-div two">
+        <div class="i">
+          <i class="fas fa-lock"></i>
+        </div>
+        <div>
+          <h5>Password</h5>
+          <input type="password" name="password" class="input demo-password" />
+        </div>
+      </div>
+      <a href="#">Forgot Password?</a>
+      <input type="submit" class="btn" value="Login" />
+      <span id="signup">or<a href="../signup"> Create an account?</a></span>
+      <span id="signup"
+        >or<a href="#" id="demo-login" class="">
+          Click here to login as test user
+        </a></span
+      >
+    </form>
+  </div>
+</div>
 
-        </div>
-        
-    </div>
-   
-    <script src="{% static 'login/library/js/function.js' %}"></script>
+<script src="{% static 'login/library/js/function.js' %}"></script>
 {% endblock %}

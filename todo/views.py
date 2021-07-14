@@ -11,15 +11,16 @@ def signupuser(request):
         return render(request, 'signup/index.html')
 
     elif request.method == 'POST' and request.POST['password1'] == request.POST['password2']:
-        user = User.objects.create_user(request.POST['username'], password=request.POST['password1'], first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'])
-        user.save()
+        user = User.objects.create_user(request.POST['username'], password=request.POST['password1'],
+                                        first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'])
+
         login(request, user)
-        return render(request, 'success.html')
+        return redirect('todo')
     elif request.method == 'POST' and request.POST['password1'] != request.POST['password2']:
         return render(request, 'signup/index.html')
 
     elif request.user.is_authenticated:
-        return redirect('../todo')
+        return redirect('todo')
 
 
 def loginuser(request):
@@ -31,11 +32,11 @@ def loginuser(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('../todo')
+            return redirect('todo')
         else:
             return render(request, 'login/index.html', {'error': 'User name and password do not match'})
     elif request.user.is_authenticated:
-        return redirect('../todo')
+        return redirect('todo')
 
 
 def logout_view(request):
@@ -45,13 +46,18 @@ def logout_view(request):
 
 def dashboard(request):
     if request.user.is_authenticated:
-        all_task = TodoList.objects.all().count()
-        completed_task = TodoList.objects.filter(is_completed=1).count()
-        upcoming_task = TodoList.objects.filter(is_completed=0).count()
-        late_task = TodoList.objects.filter(is_completed=0, due_date__lt = date.today()).count()
+        all_task = TodoList.objects.filter(username=request.user).count()
+        completed_task = TodoList.objects.filter(
+            is_completed=1, username=request.user).count()
+        upcoming_task = TodoList.objects.filter(
+            is_completed=0, username=request.user).count()
+        late_task = TodoList.objects.filter(
+            is_completed=0, due_date__lt=date.today(), username=request.user).count()
+
         profiles = Profile.objects.get(user_id=request.user.id)
+        print(profiles)
         return render(request, 'dashboard.html', {'profile': profiles, 'all_task': all_task, 'completed_task':
-            completed_task, 'upcoming_task': upcoming_task, 'late_task': late_task})
+                                                  completed_task, 'upcoming_task': upcoming_task, 'late_task': late_task})
     else:
         return redirect('../login')
 
@@ -60,7 +66,8 @@ def todo_view(request):
     todays_date = date.today()
     if request.user.is_authenticated and not request.method == 'POST':
         username = request.user.username
-        todo_list = TodoList.objects.filter(username=request.user.id).order_by('due_date')
+        todo_list = TodoList.objects.filter(
+            username=request.user.id).order_by('due_date')
         profiles = Profile.objects.get(user_id=request.user.id)
         return render(request, 'todo.html', {'todo_list': todo_list, 'username': username, 'tdate': todays_date, 'profile': profiles})
 
@@ -85,7 +92,8 @@ def todo_view(request):
             deletedid = request.POST['del-id']
             deletedtodo = TodoList.objects.get(id=int(deletedid))
             deletedtodo.delete()
-        todo_list = TodoList.objects.filter(username=request.user.id).order_by('due_date')
+        todo_list = TodoList.objects.filter(
+            username=request.user.id).order_by('due_date')
         profiles = Profile.objects.get(user_id=request.user.id)
         return render(request, 'todo.html', {'todo_list': todo_list, 'tdate': todays_date, 'profile': profiles})
 
@@ -97,10 +105,11 @@ def completed_todo_view(request):
     todays_date = date.today()
     if request.user.is_authenticated and not request.method == 'POST':
         username = request.user.username
-        todo_list = TodoList.objects.filter(username=request.user.id, is_completed=1)
+        todo_list = TodoList.objects.filter(
+            username=request.user.id, is_completed=1)
         profiles = Profile.objects.get(user_id=request.user.id)
         return render(request, 'completed-task.html', {'todo_list': todo_list, 'username': username,
-                                                   'tdate': todays_date, 'profile': profiles})
+                                                       'tdate': todays_date, 'profile': profiles})
 
     elif request.user.is_authenticated and request.method == 'POST':
         if 'up-id' in request.POST or 'completed-id' in request.POST:
@@ -123,10 +132,11 @@ def completed_todo_view(request):
             deletedid = request.POST['del-id']
             deletedtodo = TodoList.objects.get(id=int(deletedid))
             deletedtodo.delete()
-        todo_list = TodoList.objects.filter(username=request.user.id, is_completed=1)
+        todo_list = TodoList.objects.filter(
+            username=request.user.id, is_completed=1)
         profiles = Profile.objects.get(user_id=request.user.id)
         return render(request, 'completed-task.html', {'todo_list': todo_list, 'tdate': todays_date, 'profile':
-            profiles})
+                                                       profiles})
 
     else:
         return redirect('../login')
@@ -136,10 +146,11 @@ def upcoming_todo_view(request):
     todays_date = date.today()
     if request.user.is_authenticated and not request.method == 'POST':
         username = request.user.username
-        todo_list = TodoList.objects.filter(username=request.user.id, is_completed=0)
+        todo_list = TodoList.objects.filter(
+            username=request.user.id, is_completed=0)
         profiles = Profile.objects.get(user_id=request.user.id)
         return render(request, 'upcoming-todo.html', {'todo_list': todo_list, 'username': username,
-                                                   'tdate': todays_date, 'profile': profiles})
+                                                      'tdate': todays_date, 'profile': profiles})
 
     elif request.user.is_authenticated and request.method == 'POST':
         if 'up-id' in request.POST or 'completed-id' in request.POST:
@@ -162,10 +173,11 @@ def upcoming_todo_view(request):
             deletedid = request.POST['del-id']
             deletedtodo = TodoList.objects.get(id=int(deletedid))
             deletedtodo.delete()
-        todo_list = TodoList.objects.filter(username=request.user.id, is_completed=0)
+        todo_list = TodoList.objects.filter(
+            username=request.user.id, is_completed=0)
         profiles = Profile.objects.get(user_id=request.user.id)
         return render(request, 'upcoming-todo.html', {'todo_list': todo_list, 'tdate': todays_date, 'profile':
-            profiles})
+                                                      profiles})
 
     else:
         return redirect('../login')
@@ -175,10 +187,11 @@ def late_todo_view(request):
     todays_date = date.today()
     if request.user.is_authenticated and not request.method == 'POST':
         username = request.user.username
-        todo_list = TodoList.objects.filter(username=request.user.id, is_completed=0, due_date__lt=date.today())
+        todo_list = TodoList.objects.filter(
+            username=request.user.id, is_completed=0, due_date__lt=date.today())
         profiles = Profile.objects.get(user_id=request.user.id)
         return render(request, 'late-todo.html', {'todo_list': todo_list, 'username': username,
-                                                   'tdate': todays_date, 'profile': profiles})
+                                                  'tdate': todays_date, 'profile': profiles})
 
     elif request.user.is_authenticated and request.method == 'POST':
         if 'up-id' in request.POST or 'completed-id' in request.POST:
@@ -201,10 +214,11 @@ def late_todo_view(request):
             deletedid = request.POST['del-id']
             deletedtodo = TodoList.objects.get(id=int(deletedid))
             deletedtodo.delete()
-        todo_list = TodoList.objects.filter(username=request.user.id, is_completed=0, due_date__lt=date.today())
+        todo_list = TodoList.objects.filter(
+            username=request.user.id, is_completed=0, due_date__lt=date.today())
         profiles = Profile.objects.get(user_id=request.user.id)
         return render(request, 'late-todo.html', {'todo_list': todo_list, 'tdate': todays_date, 'profile':
-            profiles})
+                                                  profiles})
 
     else:
         return redirect('../login')
@@ -214,31 +228,36 @@ def add_todo(request):
     added = 0
     if request.user.is_authenticated:
         if request.method == 'POST':
-            todo = TodoList.objects.create(username=request.user, todo=request.POST['todo'], due_date=request.POST['due_date'])
+            todo = TodoList.objects.create(
+                username=request.user, todo=request.POST['todo'], due_date=request.POST['due_date'])
             todo.save()
             added = 1
             profiles = Profile.objects.get(user_id=request.user.id)
             return render(request, 'addtodo.html', {'added': added, 'profile': profiles})
         else:
             profiles = Profile.objects.get(user_id=request.user.id)
-            return render(request, 'addtodo.html',{'profile': profiles})
+            return render(request, 'addtodo.html', {'profile': profiles})
     else:
         return redirect('../login')
 
 
 def settings_view(request):
-    context = {}
-    if request.method == "POST":
-        form = ProfilesForm(request.POST, request.FILES)
-        if form.is_valid():
-            bio = form.cleaned_data.get("bio_field")
-            img = form.cleaned_data.get("img_field")
-            obj = Profile.objects.get(user_id= request.user.id)
-            obj.profile_photo = img
-            obj.bio = bio
-            obj.save()
-            context['profile'] = Profile.objects.get(user_id= request.user.id)
-            return render(request, 'settings.html', context)
+    if request.user.is_authenticated:
+        context = {}
+        if request.method == "POST":
+            form = ProfilesForm(request.POST, request.FILES)
+            if form.is_valid():
+                bio = form.cleaned_data.get("bio_field")
+                img = form.cleaned_data.get("img_field")
+                obj = Profile.objects.get(user_id=request.user.id)
+                obj.profile_photo = img
+                obj.bio = bio
+                obj.save()
+                context['profile'] = Profile.objects.get(
+                    user_id=request.user.id)
+                return render(request, 'settings.html', context)
+        else:
+            profiles = Profile.objects.get(user_id=request.user.id)
+            return render(request, 'settings.html', {'profile': profiles})
     else:
-        profiles = Profile.objects.get(user_id= request.user.id)
-        return render(request, 'settings.html', {'profile': profiles})
+        return redirect('login')

@@ -1,49 +1,56 @@
-{% extends "base.html" %}
-{% block main %}
-      <div class="main content-center" id="dashboard">
-        <div class="container">
-            <div class="row">
-              <div class="col-sm">
-                <h2>Dashboard</h2>
-              </div>
-              <div class="col-sm">
-                <form action="">
-                    <select name="" id="">
-                        <option value="all">All</option>
-                        <option value="week">Last Week</option>
-                    </select>
-                </form>
-              </div>
-            </div>
+{% extends "base.html" %} {% block main %}
+<div class="main content-center" id="dashboard">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <h2>Dashboard</h2>
+      </div>
+      <div class="col-sm">
+        <form action="">
+          <select name="" id="">
+            <option value="all">All</option>
+            <option value="week">Last Week</option>
+          </select>
+        </form>
+      </div>
+    </div>
 
-            <div class="row row-cols-2 gap-2 gap-3">
-                <div class="col">
-                    <div class="statistic hours-logged">
-                        <p class="number">{{ all_task }}</p>
-                        <p class="text">All Task</p>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="statistic upcoming-task">
-                        <p class="number">{{ upcoming_task }}</p>
-                        <p class="text">Upcoming Task</p>
-                    </div>
-                </div>
-                <div class="col">
-                  <div class="statistic task-completed">
-                      <p class="number">{{ completed_task }}</p>
-                      <p class="text">Completed Task</p>
-                  </div>
-                </div>
-                <div class="col">
-                    <div class="statistic files-uploaded">
-                        <p class="number">{{ late_task }}</p>
-                        <p class="text">Late Task</p>
-                    </div>
-                </div>
-            </div>
+    <div class="row row-cols-2 gap-2 gap-3">
+      <div class="col">
+        <a href="{% url 'todo_view' %}">
+          <div class="statistic hours-logged">
+            <p class="number">{{ all_task }}</p>
+            <p class="text">All Task</p>
           </div>
-       </div>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        </a>
+      </div>
+
+      <div class="col">
+        <a href="{% url 'upcoming_todo_view' %}">
+          <div class="statistic upcoming-task">
+            <p class="number">{{ upcoming_task }}</p>
+            <p class="text">Upcoming Task</p>
+          </div>
+        </a>
+      </div>
+      <div class="col">
+        <a href="{% url 'completed_todo_view' %}">
+          <div class="statistic task-completed">
+            <p class="number">{{ completed_task }}</p>
+            <p class="text">Completed Task</p>
+          </div>
+        </a>
+      </div>
+      <div class="col">
+        <a href="{% url 'late_todo_view' %}">
+          <div class="statistic files-uploaded">
+            <p class="number">{{ late_task }}</p>
+            <p class="text">Late Task</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 {% endblock %}

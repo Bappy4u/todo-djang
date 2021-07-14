@@ -1,86 +1,126 @@
-{% extends "base.html" %}
-{% load static %}
-{% block main %}
+{% extends "base.html" %} {% load static %} {% block main %}
 <div class="content-center" id="late-task">
-    <div>
-        {% if todo_list %}
-        <ul class="todo-list">
-            {% for todo in todo_list %}
-
-                {% if todo.is_completed == 0%}
-                     <li>
-                        <form method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="completed-id" value="{{ todo.id }}" />
-                            <a href="#" onclick="this.parentNode.submit();" title="Mark complete"><i
-                                    class="bi bi-check2-circle"></i></a>
-                        </form>
-                         <span class="todo">{{ todo.todo }}<i class="editor-pen bi bi-pencil-square"></i><i
-                                 class="trash bi bi-trash"></i></span>
-                         <span class="todo-date">{{ todo.due_date}}</span>
-                         <span class="todo-id d-none">{{ todo.id }}</span>
-                         <span class="js-date-picker d-none">{{ todo.due_date|date:'Y-m-d'}}</span>
-                         {% if todo.due_date < tdate %}
-                            <span class="late-text">Late</span>
-                         {% endif %}
-                    </li>
-                {% else %}
-                     <li>
-                        <form method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="completed-id" value="{{ todo.id }}" />
-                            <a href="#" onclick="this.parentNode.submit();" title="Mark uncomplete"><i
-                                    class="completed bi bi-check2-circle"></i></a>
-                        </form>
-                         <span class="todo">{{ todo.todo }} <i class="editor-pen bi bi-pencil-square"></i><i
-                                 class="trash bi bi-trash"></i></span>
-                         <span class="todo-date">{{ todo.due_date }}</span>
-                         <span class="todo-id d-none">{{ todo.id }}</span>
-                         <span class="js-date-picker d-none">{{ todo.due_date|date:'Y-m-d'}}</span>
-                    </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-        <div class="todo-editor">
-            <i class="editor-form-close bi bi-x-circle"></i>
-             <form action="" method="post" id="editor-form">
-                 {% csrf_token %}
-                <label for="todo">Title updt
-                    <input value="John" id="todo" name="todo" type="text" required>
-                </label>
-                 <label for="due_date">Due Date
-                    <input id="due_date" value="2018-07-22" name="due_date" type="date"  required>
-                </label>
-                 <input type="text" name="up-id"class="d-none edited-todo-id" value="1">
-                 <br>
-
-                 <input type="submit" value="Save">
-             </form>
-
-        </div>
-        <div class="todo-deletor">
-            <i class="editor-form-close bi bi-x-circle"></i>
-             <form action="" method="post" id="deletor-form">
-                 {% csrf_token %}
-                    <p>Are you sure you want to delete this todo?</p>
-                    <input value="John" id="dtodo" name="todo" type="text" disabled required>
-                    <input id="ddue_date" value="2018-07-22" name="due_date" type="date"  disabled required>
-                    <input type="text" name="del-id" class="d-none deleted-todo-id" value="1">
-                 <br>
-
-                 <input type="submit" value="Confirm Delete">
-             </form>
-
-        </div>
-        {% else %}
-        <p>No todo in the list</p>
+  <div>
+    {% if todo_list %}
+    <ul class="todo-list">
+      {% for todo in todo_list %} {% if todo.is_completed == 0%}
+      <li>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="completed-id" value="{{ todo.id }}" />
+          <a href="#" onclick="this.parentNode.submit();" title="Mark complete"
+            ><i class="bi bi-check2-circle"></i
+          ></a>
+        </form>
+        <span class="todo"
+          >{{ todo.todo }}<i class="editor-pen bi bi-pencil-square"></i
+          ><i class="trash bi bi-trash"></i
+        ></span>
+        <span class="todo-date">{{ todo.due_date}}</span>
+        <span class="todo-id d-none">{{ todo.id }}</span>
+        <span class="js-date-picker d-none"
+          >{{ todo.due_date|date:'Y-m-d'}}</span
+        >
+        {% if todo.due_date < tdate %}
+        <span class="late-text">Late</span>
         {% endif %}
-        <div class="add-new">
-            <div class="add-new-btn">
-                <a href="{% url 'add_todo_view'%}"><i class="bi bi-plus-circle"> Add todo</i></a>
-            </div>
-        </div>
+      </li>
+      {% else %}
+      <li>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="completed-id" value="{{ todo.id }}" />
+          <a
+            href="#"
+            onclick="this.parentNode.submit();"
+            title="Mark uncomplete"
+            ><i class="completed bi bi-check2-circle"></i
+          ></a>
+        </form>
+        <span class="todo"
+          >{{ todo.todo }} <i class="editor-pen bi bi-pencil-square"></i
+          ><i class="trash bi bi-trash"></i
+        ></span>
+        <span class="todo-date">{{ todo.due_date }}</span>
+        <span class="todo-id d-none">{{ todo.id }}</span>
+        <span class="js-date-picker d-none"
+          >{{ todo.due_date|date:'Y-m-d'}}</span
+        >
+      </li>
+      {% endif %} {% endfor %}
+    </ul>
+    <div class="todo-editor">
+      <i class="editor-form-close bi bi-x-circle"></i>
+      <form action="" method="post" id="editor-form">
+        {% csrf_token %}
+        <label for="todo"
+          >Title updt
+          <input value="John" id="todo" name="todo" type="text" required />
+        </label>
+        <label for="due_date"
+          >Due Date
+          <input
+            id="due_date"
+            value="2018-07-22"
+            name="due_date"
+            type="date"
+            required
+          />
+        </label>
+        <input
+          type="text"
+          name="up-id"
+          class="d-none edited-todo-id"
+          value="1"
+        />
+        <br />
+
+        <input type="submit" value="Save" />
+      </form>
     </div>
+    <div class="todo-deletor">
+      <i class="editor-form-close bi bi-x-circle"></i>
+      <form action="" method="post" id="deletor-form">
+        {% csrf_token %}
+        <p>Are you sure you want to delete this todo?</p>
+        <input
+          value="John"
+          id="dtodo"
+          name="todo"
+          type="text"
+          disabled
+          required
+        />
+        <input
+          id="ddue_date"
+          value="2018-07-22"
+          name="due_date"
+          type="date"
+          disabled
+          required
+        />
+        <input
+          type="text"
+          name="del-id"
+          class="d-none deleted-todo-id"
+          value="1"
+        />
+        <br />
+
+        <input type="submit" value="Confirm Delete" />
+      </form>
+    </div>
+    {% else %}
+    <p class="no-todo-text">No late Todo List</p>
+    {% endif %}
+    <div class="add-new">
+      <div class="add-new-btn">
+        <a href="{% url 'add_todo_view'%}"
+          ><i class="bi bi-plus-circle"> Add todo</i></a
+        >
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
