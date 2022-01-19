@@ -25,12 +25,12 @@ SECRET_KEY = '40sb1ek^!l*nditzu)$_ek_b6_tz-%p-ae88=4q=agpso)v9e-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 STATICFILES_DIRS = [
     BASE_DIR / "static",
     '/var/www/static/',
 ]
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Application definition
 
 INSTALLED_APPS = [
